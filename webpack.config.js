@@ -2,7 +2,7 @@
  * @Description  :
  * @Author       : ch1lam
  * @Date         : 2022-05-28 17:45:29
- * @LastEditTime : 2022-05-28 19:41:36
+ * @LastEditTime : 2022-05-28 19:56:22
  * @LastEditors  : chilam
  * @FilePath     : \github-hyper\webpack.config.js
  */
@@ -19,7 +19,7 @@ const tsRule = {
 
 const plugins = [
   new HTMLWebpackPlugin({
-    template: "src/popup-page/popup.html",
+    template: "src/views/popup.html",
     filename: "popup.html",
     chunks: ["popup"],
   }),
@@ -33,7 +33,8 @@ module.exports = {
   mode: "development",
   devtool: "cheap-module-source-map",
   entry: {
-    popup: "./src/popup-page/popup.tsx",
+    popup: "./src/Popup/index.tsx",
+    contentScript: "./src/ContentScript/index.ts",
   },
   output: {
     filename: "[name].js",
