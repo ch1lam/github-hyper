@@ -3,6 +3,7 @@
   "description": "Plugins to enhance the github user experience",
   "version": "0.1",
   "manifest_version": 3,
+  "author": "ch1lam",
   "action": {
     "default_popup": "popup.html",
     "default_icon": "popup.png"
@@ -18,8 +19,9 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["contentScript.js"]
+      "matches": ["https://github.com/*"],
+      "js": ["contentScript.js"],
+      "run_at": "document_end"
     }
   ]
 }
