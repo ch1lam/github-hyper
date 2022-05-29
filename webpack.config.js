@@ -1,11 +1,3 @@
-/*
- * @Description  :
- * @Author       : ch1lam
- * @Date         : 2022-05-28 17:45:29
- * @LastEditTime : 2022-05-28 19:56:22
- * @LastEditors  : chilam
- * @FilePath     : \github-hyper\webpack.config.js
- */
 const { resolve } = require("path");
 const HTMLWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");

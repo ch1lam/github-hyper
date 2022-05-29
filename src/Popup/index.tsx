@@ -1,11 +1,3 @@
-/*
- * @Description  :
- * @Author       : ch1lam
- * @Date         : 2022-05-28 17:53:33
- * @LastEditTime : 2022-05-28 21:41:15
- * @LastEditors  : chilam
- * @FilePath     : \github-hyper\src\popup-page\popup.tsx
- */
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 
