@@ -13,7 +13,11 @@ export const Popup = () => {
     });
   }, [content]);
 
-  return <div>{content}</div>;
+  return (
+    <div>
+      <button>测试</button>
+    </div>
+  );
 };
 
 const root = createRoot(document.getElementById("popup") as HTMLElement);
