@@ -1,3 +1,5 @@
+import styles from "../ContentScript/index.module.scss";
+
 /**
  * When the user scrolls down 20px from the top of the document, show the button
  */
@@ -28,6 +30,7 @@ const backTopBtn: HTMLButtonElement = document.createElement("button");
 backTopBtn.id = "backToTopBtn";
 backTopBtn.textContent = "🔝";
 backTopBtn.addEventListener("click", () => backToTop());
+backTopBtn.className += `${styles.backTopBtn}`;
 backTopBtn.style.width = "40px";
 backTopBtn.style.height = "40px";
 backTopBtn.style.display = "none";
@@ -36,15 +39,18 @@ backTopBtn.style.justifyContent = "center";
 backTopBtn.style.position = "fixed";
 backTopBtn.style.backgroundColor = "#fff";
 backTopBtn.style.right = "40px";
-backTopBtn.style.bottom = "40px";
+backTopBtn.style.bottom = "100px";
 backTopBtn.style.zIndex = "99";
 backTopBtn.style.border = "none";
+backTopBtn.style.borderColor = "#d0d7de";
 backTopBtn.style.outline = "none";
-backTopBtn.style.color = "#24292f";
+backTopBtn.style.color = "#d0d7de";
+backTopBtn.style.backgroundColor = "#ffffff";
 backTopBtn.style.cursor = "pointer";
 backTopBtn.style.fontSize = "20px";
 backTopBtn.style.borderRadius = "50%";
-backTopBtn.style.boxShadow = "0 0 6px rgb(0 0 0 / 12%)";
+backTopBtn.style.boxShadow = "0 12px 28px rgba(140,149,159,0.3)";
+// backTopBtn.style.boxShadow = "0 0 6px rgb(0 0 0 / 12%)";
 
 const addBackTopBtn = () => {
   const tag = document.querySelector("body");
