@@ -9,6 +9,21 @@ const tsRule = {
   use: "ts-loader",
 };
 
+const scssRule = {
+  test: /\.scss$/i,
+  exclude: /node_modules/,
+  use: [
+    "style-loader",
+    {
+      loader: "css-loader",
+      options: {
+        modules: true,
+      },
+    },
+    "sass-loader",
+  ],
+};
+
 const plugins = [
   new HTMLWebpackPlugin({
     template: "src/views/popup.html",
@@ -33,7 +48,7 @@ module.exports = {
     path: resolve(__dirname, "dist"),
   },
   module: {
-    rules: [tsRule],
+    rules: [tsRule, scssRule],
   },
   plugins,
 };
