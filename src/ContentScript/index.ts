@@ -9,8 +9,10 @@ window.onscroll = () => {
       document.body.scrollTop > 200 ||
       document.documentElement.scrollTop > 200
     ) {
+      backTopBtn.style.opacity = "1";
       backTopBtn.style.visibility = "visible";
     } else {
+      backTopBtn.style.opacity = "0";
       backTopBtn.style.visibility = "hidden";
     }
   };
@@ -31,7 +33,6 @@ backTopBtn.id = "backTopBtn";
 backTopBtn.textContent = "🔝";
 backTopBtn.addEventListener("click", () => backToTop());
 backTopBtn.className += `${styles.backTopBtn}`;
-backTopBtn.style.visibility = "hidden";
 
 const addBackTopBtn = () => {
   const tag = document.querySelector("body");
