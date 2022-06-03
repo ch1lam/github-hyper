@@ -10,7 +10,7 @@ const tsRule = {
 };
 
 const scssRule = {
-  test: /\.scss$/i,
+  test: /\.s[ac]ss$/i,
   exclude: /node_modules/,
   use: [
     "style-loader",
