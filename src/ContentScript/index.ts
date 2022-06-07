@@ -34,7 +34,7 @@ backTopBtn.textContent = "🔝";
 backTopBtn.addEventListener("click", () => backToTop());
 backTopBtn.className += `${styles.backTopBtn}`;
 
-const addBackTopBtn = () => {
+const createBackTopBtn = () => {
   const tag = document.querySelector("body");
   if (!tag) {
     return;
@@ -43,7 +43,7 @@ const addBackTopBtn = () => {
 };
 
 const init = () => {
-  addBackTopBtn();
+  createBackTopBtn();
 };
 
 init();
