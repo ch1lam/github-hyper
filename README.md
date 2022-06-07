@@ -5,6 +5,7 @@ Plugins to enhance the github user experience.
 ## Feature
 
 - 🔝 Back to top button
+- 📇 Table of contents
 
 ## Usage
 
