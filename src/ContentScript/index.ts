@@ -1,4 +1,5 @@
 import styles from "../ContentScript/index.module.scss";
+import createContents from "../ContentScript/contents";
 
 /**
  * When the user scrolls down 20px from the top of the document, show the button
@@ -44,6 +45,7 @@ const createBackTopBtn = () => {
 
 const init = () => {
   createBackTopBtn();
+  createContents();
 };
 
 init();
