@@ -50,5 +50,8 @@ module.exports = {
   module: {
     rules: [tsRule, scssRule],
   },
+  resolve: {
+    extensions: [".js", ".jsx", ".ts", ".tsx"],
+  },
   plugins,
 };
