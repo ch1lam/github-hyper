@@ -1,3 +1,5 @@
+import styles from "./index.module.scss";
+
 interface TitleInfo {
   id: string;
   title: string;
@@ -36,23 +38,43 @@ const traverseArticle = () => {
  * Component rendering style
  */
 const render = (titles: TitleInfo[]) => {
-  let str: string = "";
+  const nav: HTMLElement = document.createElement("nav");
   const contents: HTMLUListElement = document.createElement("ul");
-
+  nav.className += `${styles.toc}`;
   contents.id = "table-of-contents";
 
   titles.map((titleInfo, index) => {
-    str +=
-      "<li>" +
-      "<a href='#" +
-      titleInfo.id +
-      "'>" +
-      titleInfo.title +
-      "</a></li>";
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    const text = document.createTextNode(titleInfo.title);
+
+    a.style.paddingLeft = `${titleInfo.level * 20 - 20}px`;
+    a.setAttribute("href", `#${titleInfo.id}`);
+    a.appendChild(text);
+    li.addEventListener("click", onSelected);
+    li.appendChild(a);
+    contents.appendChild(li);
   });
 
-  contents.innerHTML = str;
-  return contents;
+  nav.appendChild(contents);
+
+  return nav;
+};
+
+/**
+ * selected style change
+ */
+const onSelected = (event: MouseEvent) => {
+  const contents = document.getElementById("table-of-contents");
+  const current = contents?.querySelector(`.${styles.selected}`);
+
+  if (!event.currentTarget) {
+    return;
+  }
+  if (current && current !== (event.currentTarget as HTMLElement)) {
+    current.classList.remove(`${styles.selected}`);
+  }
+  (event.currentTarget as HTMLElement).classList.add(`${styles.selected}`);
 };
 
 /**
@@ -60,7 +82,7 @@ const render = (titles: TitleInfo[]) => {
  */
 const createContents = () => {
   traverseArticle();
-  const tag = document.querySelector("div.BorderGrid.BorderGrid--spacious");
+  const tag = document.querySelector("div.Layout-sidebar");
   if (!tag) {
     return;
   }
