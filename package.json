@@ -1,7 +1,7 @@
 {
   "name": "github-hyper",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.3.1",
+  "description": "Plugins to enhance the github user experience",
   "main": "index.js",
   "scripts": {
     "build": "webpack"
