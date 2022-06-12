@@ -1,7 +1,7 @@
 {
   "name": "github hyper",
   "description": "Plugins to enhance the github user experience",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "manifest_version": 3,
   "author": "ch1lam",
   "action": {

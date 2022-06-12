@@ -1,6 +1,6 @@
 {
   "name": "github-hyper",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Plugins to enhance the github user experience",
   "main": "index.js",
   "scripts": {
