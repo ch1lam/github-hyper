@@ -39,7 +39,6 @@ window.onscroll = () => {
 };
 
 const followCurrentTitle = () => {
-  console.log("running");
   let minDistance = 10000;
 
   titles.map((titleInfo, index) => {
@@ -55,11 +54,9 @@ const followCurrentTitle = () => {
     const currentLiElement = contents?.querySelector(
       `a[href="#${titleInfo.id}"`
     )?.parentElement;
-    console.log(distance);
 
     // When the title is displayed at the top of the viewport
     if (distance > 0 && distance <= minDistance) {
-      console.log(currentLiElement);
       currentLiElement?.classList.add(`${styles.selected}`);
       minDistance = distance;
     } else {
