@@ -47,6 +47,10 @@ const createBackTopBtn = () => {
 const init = () => {
   createBackTopBtn();
   createContents();
+  document.addEventListener("pjax:end", () => {
+    document.getElementById("table-of-contents-wrapper")?.remove();
+    createContents();
+  });
 };
 
 init();

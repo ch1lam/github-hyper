@@ -20,8 +20,10 @@ const article = document.querySelector("readme-toc article");
  */
 const traverseArticle = () => {
   if (!article) {
+    console.log("can't find article");
     return;
   }
+  titles.length = 0;
   Array.from(article.children).forEach((e, _index) => {
     if (titleTag.includes(e.nodeName)) {
       titles.push({
@@ -40,6 +42,7 @@ const traverseArticle = () => {
 const render = (titles: TitleInfo[]) => {
   const nav: HTMLElement = document.createElement("nav");
   const contents: HTMLUListElement = document.createElement("ul");
+  nav.id = "table-of-contents-wrapper";
   nav.className += `${styles.toc}`;
   contents.id = "table-of-contents";
 
@@ -81,12 +84,14 @@ const onSelected = (event: MouseEvent) => {
  * create table of contents
  */
 const createContents = () => {
+  if (document.getElementById("table-of-contents-wrapper")) {
+    return;
+  }
   traverseArticle();
   const tag = document.querySelector("div.Layout-sidebar");
   if (!tag) {
     return;
   }
-  render(titles);
   tag.insertAdjacentElement("beforeend", render(titles));
 };
 
