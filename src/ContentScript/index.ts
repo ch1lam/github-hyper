@@ -1,3 +1,4 @@
+import { article, titles, titleTag } from "./contents";
 import styles from "../ContentScript/index.module.scss";
 import createContents from "../ContentScript/contents";
 
@@ -34,6 +35,37 @@ const showBackTopBtn = () => {
  */
 window.onscroll = () => {
   showBackTopBtn();
+  followCurrentTitle();
+};
+
+const followCurrentTitle = () => {
+  console.log("running");
+  let minDistance = 10000;
+
+  titles.map((titleInfo, index) => {
+    const titleElement = document.getElementById(titleInfo.id)?.parentElement;
+    if (!titleElement) {
+      return;
+    }
+
+    // The distance of elements to the viewport
+    const distance = titleElement.getBoundingClientRect().top;
+    const contents = document.getElementById("table-of-contents");
+    // <Li> should be selected
+    const currentLiElement = contents?.querySelector(
+      `a[href="#${titleInfo.id}"`
+    )?.parentElement;
+    console.log(distance);
+
+    // When the title is displayed at the top of the viewport
+    if (distance > 0 && distance <= minDistance) {
+      console.log(currentLiElement);
+      currentLiElement?.classList.add(`${styles.selected}`);
+      minDistance = distance;
+    } else {
+      currentLiElement?.classList.remove(`${styles.selected}`);
+    }
+  });
 };
 
 const createBackTopBtn = () => {
@@ -49,6 +81,7 @@ const init = () => {
   createContents();
   document.addEventListener("pjax:end", () => {
     document.getElementById("table-of-contents-wrapper")?.remove();
+    titles.length = 0;
     createContents();
   });
 };

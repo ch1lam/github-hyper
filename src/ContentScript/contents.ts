@@ -7,13 +7,13 @@ interface TitleInfo {
   nodeName: string;
 }
 
-const titleTag = ["H1", "H2", "H3", "H4", "H5", "H6"];
-const titles: TitleInfo[] = [];
+export const titleTag = ["H1", "H2", "H3", "H4", "H5", "H6"];
+export const titles: TitleInfo[] = [];
 
 /**
  * Crawl title tags
  */
-const article = document.querySelector("readme-toc article");
+export const article = document.querySelector("readme-toc article");
 
 /**
  * Traversing articles and package header labels
@@ -23,14 +23,14 @@ const traverseArticle = () => {
     console.log("can't find article");
     return;
   }
-  titles.length = 0;
-  Array.from(article.children).forEach((e, _index) => {
-    if (titleTag.includes(e.nodeName)) {
+  // titles.length = 0;
+  Array.from(article.children).forEach((element, _index) => {
+    if (titleTag.includes(element.nodeName)) {
       titles.push({
-        id: e.firstElementChild!.id,
-        title: e.textContent!,
-        level: Number(e.nodeName.substring(1, 2)),
-        nodeName: e.nodeName,
+        id: element.firstElementChild!.id,
+        title: element.textContent!,
+        level: Number(element.nodeName.substring(1, 2)),
+        nodeName: element.nodeName,
       });
     }
   });
@@ -88,7 +88,9 @@ const createContents = () => {
     return;
   }
   traverseArticle();
-  const tag = document.querySelector("div.Layout-sidebar");
+  const tag = document.querySelector(
+    "div.Layout.Layout--flowRow-until-md.Layout--sidebarPosition-end.Layout--sidebarPosition-flowRow-end div.Layout-sidebar"
+  );
   if (!tag) {
     return;
   }
