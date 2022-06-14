@@ -26,11 +26,11 @@ Plugins to enhance the github user experience.
 
 > Download via Edge Add-ons or follow the instructions below
 
-1. Click here to download the latest edge.zip release
+1. Click here to download the latest `edge.zip` release
 2. Extract the file
 3. Open Edge
 4. Enter `edge://extensions` in the address bar
-5. Enable `developer mode` with the toggle on the top right side of the page if it is not enabled already
+5. Enable `developer mode` with the toggle on the left side of the page if it is not enabled already
 6. Click `load unpacked` on the left side of the page
 7. Find and select the extracted folder, this extension should now be installed
 8. To pin the extension, click the `puzzle icon` on the top right of Edge, then `pin the extension`
@@ -42,7 +42,7 @@ Plugins to enhance the github user experience.
 3. Open Chrome
 4. Enter `chrome://extensions` in the address bar
 5. Enable `developer mode` with the toggle on the top right side of the page if it is not enabled already
-6. Click `load unpacked` on the left side of the page
+6. Click `load unpacked` on the top side of the page
 7. Find and select the extracted folder, this extension should now be installed
 8. To pin the extension, click the `puzzle icon` on the top right of Chrome, then `pin the extension`
 
@@ -65,6 +65,6 @@ Anyone is welcome to provide contributions to this project by submitting a PR (P
 
 1. Run `pnpm build` to build the production version
 2. Open Edge or Chrome
-3. Enter `chrome://extensions` in the address bar
-4. Click `Pack extension` on the left side of the page
+3. Enter `edge://extensions` or `chrome://extensions`
+4. Click `Pack extension`
 5. Choose `/github-hyper/dist` and click `Pack extension`
