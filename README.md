@@ -9,7 +9,7 @@ Plugins to enhance the github user experience.
 <br>
 
 <p align=center>
-<b>English<b> • 简体中文
+<b>English</b> • 简体中文
 </p>
 
 <br>
