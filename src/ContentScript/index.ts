@@ -38,6 +38,9 @@ window.onscroll = () => {
   followCurrentTitle();
 };
 
+/**
+ * Follow the article title to scroll
+ */
 const followCurrentTitle = () => {
   let minDistance = 10000;
 
@@ -56,7 +59,7 @@ const followCurrentTitle = () => {
     )?.parentElement;
 
     // When the title is displayed at the top of the viewport
-    if (distance > 0 && distance <= minDistance) {
+    if (distance > 40 && distance <= minDistance) {
       currentLiElement?.classList.add(`${styles.selected}`);
       minDistance = distance;
     } else {
