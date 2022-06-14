@@ -8,9 +8,9 @@
 
 <br>
 
-<div align=center>
-  <p>English • <b>简体中文</b></p>
-</div>
+<p align=center>
+<a href="https://github.com/ch1lam/github-hyper#github-hyper">English</a> • <b>简体中文</b>
+</p>
 
 <br>
 

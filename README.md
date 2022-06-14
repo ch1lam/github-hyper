@@ -9,7 +9,7 @@ Plugins to enhance the github user experience.
 <br>
 
 <p align=center>
-<b>English</b> • 简体中文
+<b>English</b> • <a href="https://github.com/ch1lam/github-hyper/blob/master/README-zh.md">简体中文</a>
 </p>
 
 <br>
