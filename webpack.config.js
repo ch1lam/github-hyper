@@ -25,11 +25,11 @@ const scssRule = {
 };
 
 const plugins = [
-  new HTMLWebpackPlugin({
-    template: "src/views/popup.html",
-    filename: "popup.html",
-    chunks: ["popup"],
-  }),
+  // new HTMLWebpackPlugin({
+  //   template: "src/views/popup.html",
+  //   filename: "popup.html",
+  //   chunks: ["popup"],
+  // }),
   new CopyWebpackPlugin({
     patterns: [{ from: "public", to: "." }],
   }),
@@ -40,7 +40,7 @@ module.exports = {
   mode: "development",
   devtool: "cheap-module-source-map",
   entry: {
-    popup: "./src/Popup/index.tsx",
+    // popup: "./src/Popup/index.tsx",
     contentScript: "./src/ContentScript/index.ts",
   },
   output: {
