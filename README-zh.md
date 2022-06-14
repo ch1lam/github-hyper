@@ -26,7 +26,7 @@
 
 > 在 Edge Add-ons 中下载或按下列说明步骤操作
 
-1. 点击此处下载 `edge.zip` 最新版
+1. 点击此处下载 `github-hyper-edge.zip` 最新版
 2. 解压文件
 3. 打开 Edge 浏览器
 4. 在地址栏中输入 `edge://extensions`
@@ -37,7 +37,7 @@
 
 ### Chrome
 
-1. 点击此处下载 `chrome.zip` 最新版
+1. 点击此处下载 `github-hyper-chrome.zip` 最新版
 2. 解压文件
 3. 打开 Chrome 浏览器
 4. 在地址栏中输入 `edge://extensions`

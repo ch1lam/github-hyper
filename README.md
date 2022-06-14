@@ -26,7 +26,7 @@ Plugins to enhance the github user experience.
 
 > Download via Edge Add-ons or follow the instructions below
 
-1. Click here to download the latest `edge.zip` release
+1. Click here to download the latest `github-hyper-edge.zip` release
 2. Extract the file
 3. Open Edge
 4. Enter `edge://extensions` in the address bar
@@ -37,7 +37,7 @@ Plugins to enhance the github user experience.
 
 ### Chrome
 
-1. Click here to download the latest chrome.zip release
+1. Click here to download the latest `github-hyper-chrome.zip` release
 2. Extract the file
 3. Open Chrome
 4. Enter `chrome://extensions` in the address bar
