@@ -2,12 +2,19 @@
 
 ![Github Hyper Banner](https://user-images.githubusercontent.com/39334548/173551041-0aec28df-3b70-451d-becf-4b882129b799.png)
 
-<div align=center>
-  <p>English • 简体中文</p>
-  <p>Plugins to enhance the github user experience.</p>
-</div>
+<p align=center>
+Plugins to enhance the github user experience.
+</p>
 
-## Feature
+<br>
+
+<p align=center>
+<b>English<b> • 简体中文
+</p>
+
+<br>
+
+## Features
 
 - ⚡ Lightweight script
 - 🔝 Back to top button
