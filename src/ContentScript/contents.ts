@@ -23,7 +23,7 @@ const traverseArticle = () => {
     console.log("can't find article");
     return;
   }
-  // titles.length = 0;
+
   Array.from(article.children).forEach((element, _index) => {
     if (titleTag.includes(element.nodeName)) {
       titles.push({
