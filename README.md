@@ -3,7 +3,7 @@
 ![Github Hyper Banner](https://user-images.githubusercontent.com/39334548/173551041-0aec28df-3b70-451d-becf-4b882129b799.png)
 
 <p align=center>
-Plugins to enhance the github user experience.
+Chrome plugin to enhance the github user experience.
 </p>
 
 <br>
