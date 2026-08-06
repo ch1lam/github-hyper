@@ -1,3 +1,5 @@
+@use "sass:math";
+
 $toc-indicator-size: 14px;
 
 .backTopBtn {
@@ -42,7 +44,7 @@ $toc-indicator-size: 14px;
       content: "";
       display: block;
       position: absolute;
-      left: ($toc-indicator-size / 2);
+      left: math.div($toc-indicator-size, 2);
       background-color: rgba(0, 0, 0, 0.5);
       width: 1px;
       height: 100%;
