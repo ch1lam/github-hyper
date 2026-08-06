@@ -84,7 +84,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 - **Version must be kept in sync** between `package.json` and `public/manifest.json` (currently 0.4.1). Bump both.
 - The extension is tightly coupled to GitHub's DOM and is fragile by design:
-  - TOC extraction targets the `readme-toc article` element and inserts into a long `div.Layout--flowRow-until-md...` sidebar selector in `src/ContentScript/contents.ts`.
-  - Re-crawls on GitHub's SPA navigation via the `pjax:end` event in `src/ContentScript/index.ts`.
-  - `window.onscroll` is assigned globally (overwrites any existing handler).
+  - GitHub renders repo pages as a Primer React app; the README is **not in the initial HTML** — it's rendered client-side, so TOC extraction only works after the README mounts.
+  - TOC extraction targets the client-rendered README (`.markdown-body`, `#readme-ov-file`) and injects into the `[data-component="SplitPageLayout.Sidebar"]` element (old `div.Layout--flowRow-until-md...` selector kept as fallback) in `src/ContentScript/contents.ts`.
+  - Re-crawls on DOM mutations via a `MutationObserver` (GitHub's SPA nav uses Turbo-frames, not pjax) in `src/ContentScript/index.ts`.
 - Changes to GitHub's markup silently break features (empty TOC, missing button). After DOM-related edits, test against a real GitHub repo README (with headings) and a non-README page.
