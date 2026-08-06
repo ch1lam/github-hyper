@@ -4,36 +4,63 @@ interface TitleInfo {
   id: string;
   title: string;
   level: number;
-  nodeName: string;
 }
 
-export const titleTag = ["H1", "H2", "H3", "H4", "H5", "H6"];
+const README_SELECTORS = [
+  "#readme-ov-file .markdown-body",
+  ".markdown-body",
+];
+
+const SIDEBAR_SELECTORS = [
+  '[data-component="SplitPageLayout.Sidebar"]',
+  "div.Layout.Layout--flowRow-until-md.Layout--sidebarPosition-end.Layout--sidebarPosition-flowRow-end div.Layout-sidebar",
+];
+
 export const titles: TitleInfo[] = [];
 
-/**
- * Crawl title tags
- */
-export const article = document.querySelector("readme-toc article");
+const findReadme = (): HTMLElement | null => {
+  for (const selector of README_SELECTORS) {
+    const element = document.querySelector<HTMLElement>(selector);
+    if (element) {
+      return element;
+    }
+  }
+  return null;
+};
+
+const findSidebar = (): HTMLElement | null => {
+  for (const selector of SIDEBAR_SELECTORS) {
+    const element = document.querySelector<HTMLElement>(selector);
+    if (element) {
+      return element;
+    }
+  }
+  return null;
+};
 
 /**
- * Traversing articles and package header labels
+ * Crawl heading tags from the rendered README
  */
-const traverseArticle = () => {
-  if (!article) {
-    console.log("can't find article");
-    return;
+const extractTitles = (): TitleInfo[] => {
+  const readme = findReadme();
+  if (!readme) {
+    return [];
   }
 
-  Array.from(article.children).forEach((element, _index) => {
-    if (titleTag.includes(element.nodeName)) {
-      titles.push({
-        id: element.firstElementChild!.id,
-        title: element.textContent!,
-        level: Number(element.nodeName.substring(1, 2)),
-        nodeName: element.nodeName,
-      });
+  const result: TitleInfo[] = [];
+  readme.querySelectorAll("h1, h2, h3, h4, h5, h6").forEach((element) => {
+    const heading = element as HTMLElement;
+    const id = heading.id || heading.firstElementChild?.id;
+    if (!id) {
+      return;
     }
+    result.push({
+      id,
+      title: heading.textContent ?? "",
+      level: Number(heading.nodeName.substring(1, 2)),
+    });
   });
+  return result;
 };
 
 /**
@@ -46,7 +73,7 @@ const render = (titles: TitleInfo[]) => {
   nav.className += `${styles.toc}`;
   contents.id = "table-of-contents";
 
-  titles.map((titleInfo, index) => {
+  titles.map((titleInfo) => {
     const li = document.createElement("li");
     const a = document.createElement("a");
     const text = document.createTextNode(titleInfo.title);
@@ -83,18 +110,18 @@ const onSelected = (event: MouseEvent) => {
 /**
  * create table of contents
  */
-const createContents = () => {
+export const createContents = () => {
   if (document.getElementById("table-of-contents-wrapper")) {
     return;
   }
-  traverseArticle();
-  const tag = document.querySelector(
-    "div.Layout.Layout--flowRow-until-md.Layout--sidebarPosition-end.Layout--sidebarPosition-flowRow-end div.Layout-sidebar"
-  );
-  if (!tag) {
+
+  titles.length = 0;
+  titles.push(...extractTitles());
+
+  const sidebar = findSidebar();
+  if (!titles.length || !sidebar) {
     return;
   }
-  tag.insertAdjacentElement("beforeend", render(titles));
-};
 
-export default createContents;
+  sidebar.insertAdjacentElement("beforeend", render(titles));
+};

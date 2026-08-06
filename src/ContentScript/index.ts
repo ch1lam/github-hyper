@@ -1,6 +1,5 @@
-import { article, titles, titleTag } from "./contents";
-import styles from "../ContentScript/index.module.scss";
-import createContents from "../ContentScript/contents";
+import { titles, createContents } from "./contents";
+import styles from "./index.module.scss";
 
 /**
  * When the user clicks on the button, scroll to the top of the document
@@ -33,10 +32,10 @@ const showBackTopBtn = () => {
 /**
  * When the user scrolls down 20px from the top of the document, show the button
  */
-window.onscroll = () => {
+window.addEventListener("scroll", () => {
   showBackTopBtn();
   followCurrentTitle();
-};
+});
 
 /**
  * Follow the article title to scroll
@@ -55,7 +54,7 @@ const followCurrentTitle = () => {
     const contents = document.getElementById("table-of-contents");
     // <Li> should be selected
     const currentLiElement = contents?.querySelector(
-      `a[href="#${titleInfo.id}"`
+      `a[href="#${titleInfo.id}"]`
     )?.parentElement;
 
     // When the title is displayed at the top of the viewport
@@ -79,11 +78,10 @@ const createBackTopBtn = () => {
 const init = () => {
   createBackTopBtn();
   createContents();
-  document.addEventListener("pjax:end", () => {
-    document.getElementById("table-of-contents-wrapper")?.remove();
-    titles.length = 0;
+
+  new MutationObserver(() => {
     createContents();
-  });
+  }).observe(document.body, { childList: true, subtree: true });
 };
 
 init();
