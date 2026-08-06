@@ -42,7 +42,7 @@ module.exports = {
     rules: [tsRule, scssRule],
   },
   resolve: {
-    extensions: [".js", ".jsx", ".ts", ".tsx"],
+    extensions: [".js", ".ts"],
   },
   plugins,
 };
