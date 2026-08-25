@@ -26,7 +26,7 @@ Chrome plugin to enhance the github user experience.
 
 > Download via Edge Add-ons or follow the instructions below
 
-1. Click [releases](https://github.com/ch1lam/github-hyper/releases) to download the latest `github-hyper-edge.zip` release
+1. Download the latest [github-hyper-edge.zip](https://github.com/ch1lam/github-hyper/releases/latest/download/github-hyper-edge.zip) release
 2. Extract the file
 3. Open Edge
 4. Enter `edge://extensions` in the address bar
@@ -37,7 +37,7 @@ Chrome plugin to enhance the github user experience.
 
 ### Chrome
 
-1. Click [releases](https://github.com/ch1lam/github-hyper/releases) to download the latest `github-hyper-chrome.zip` release
+1. Download the latest [github-hyper-chrome.zip](https://github.com/ch1lam/github-hyper/releases/latest/download/github-hyper-chrome.zip) release
 2. Extract the file
 3. Open Chrome
 4. Enter `chrome://extensions` in the address bar
@@ -68,3 +68,5 @@ Anyone is welcome to provide contributions to this project by submitting a PR (P
 3. Enter `edge://extensions` or `chrome://extensions`
 4. Click `Pack extension`
 5. Choose `/github-hyper/dist` and click `Pack extension`
+
+Pushing a tag that matches the extension version, such as `v0.6.0`, automatically builds both browser ZIP packages and publishes a GitHub Release.

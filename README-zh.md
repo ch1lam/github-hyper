@@ -26,7 +26,7 @@
 
 > 在 Edge Add-ons 中下载或按下列说明步骤操作
 
-1. 点击 [releases](https://github.com/ch1lam/github-hyper/releases) 下载 `github-hyper-edge.zip` 最新版
+1. 下载最新版 [github-hyper-edge.zip](https://github.com/ch1lam/github-hyper/releases/latest/download/github-hyper-edge.zip)
 2. 解压文件
 3. 打开 Edge 浏览器
 4. 在地址栏中输入 `edge://extensions`
@@ -37,10 +37,10 @@
 
 ### Chrome
 
-1. 点击 [releases](https://github.com/ch1lam/github-hyper/releases) 下载 `github-hyper-chrome.zip` 最新版
+1. 下载最新版 [github-hyper-chrome.zip](https://github.com/ch1lam/github-hyper/releases/latest/download/github-hyper-chrome.zip)
 2. 解压文件
 3. 打开 Chrome 浏览器
-4. 在地址栏中输入 `edge://extensions`
+4. 在地址栏中输入 `chrome://extensions`
 5. 点击并启用右侧顶栏中的 `开发者模式`
 6. 点击左侧顶栏中的 `加载已解压的扩展程序`
 7. 找到并选择已解压文件，扩展将安装完成
@@ -68,3 +68,5 @@
 3. 在地址栏中输入`edge://extensions`或`chrome://extensions`
 4. 点击 `打包扩展`
 5. 选择 `/github-hyper/dist`目录并点击`打包扩展`
+
+推送与扩展版本一致的标签（例如 `v0.6.0`）后，GitHub Actions 会自动构建 Chrome/Edge ZIP 并发布 GitHub Release。
