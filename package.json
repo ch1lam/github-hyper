@@ -1,23 +1,23 @@
 {
   "name": "github-hyper",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Plugins to enhance the github user experience",
   "main": "index.js",
   "scripts": {
     "dev": "webpack --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && webpack --config webpack.prod.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/chrome": "^0.2.5",
-    "clean-webpack-plugin": "^4.0.0",
+    "@types/chrome": "^0.2.7",
     "copy-webpack-plugin": "^14.0.0",
     "css-loader": "^7.1.4",
-    "sass": "^1.102.0",
+    "mini-css-extract-plugin": "^2.10.2",
+    "sass": "^1.103.1",
     "sass-loader": "^17.0.0",
-    "style-loader": "^4.0.0",
     "ts-loader": "^9.6.2",
     "typescript": "^5.9.3",
     "webpack": "^5.109.2",

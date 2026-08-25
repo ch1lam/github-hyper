@@ -1,108 +1,220 @@
-@use "sass:math";
-
-$toc-indicator-size: 14px;
+$ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
 .backTopBtn {
-  width: 40px;
-  height: 40px;
-  align-items: center;
-  justify-content: center;
-  visibility: hidden;
-  opacity: 1;
   position: fixed;
-  right: 40px;
-  bottom: 40px;
+  right: 28px;
+  bottom: 28px;
   z-index: 99;
-  border: none;
-  border-color: #d0d7de;
-  outline: none;
-  color: #d0d7de;
-  background-color: #ffffff;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  place-items: center;
+  color: var(--fgColor-default, #1f2328);
+  background: var(--bgColor-default, #ffffff);
+  border: 1px solid var(--borderColor-default, #d0d7de);
+  border-radius: 12px;
+  box-shadow: var(--shadow-floating-small, 0 8px 24px rgba(31, 35, 40, 0.16));
   cursor: pointer;
-  font-size: 20px;
-  border-radius: 50%;
-  box-shadow: 0 12px 28px rgba(140, 149, 159, 0.3);
-  transition: all 1s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(10px) scale(0.94);
+  transition:
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    opacity 180ms ease,
+    transform 220ms $ease-out;
+  appearance: none;
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    transition-delay: 0s;
+  }
+
+  &:hover {
+    color: var(--fgColor-onEmphasis, #ffffff);
+    background: var(--bgColor-accent-emphasis, #0969da);
+    border-color: var(--bgColor-accent-emphasis, #0969da);
+    box-shadow: var(--shadow-floating-medium, 0 10px 30px rgba(9, 105, 218, 0.28));
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.96);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-outlineColor, #0969da);
+    outline-offset: 3px;
+  }
+
+  svg {
+    display: block;
+  }
 }
 
 .toc {
-  margin: 100px 0px 0px 5px;
   position: sticky;
-  top: 50px;
-  width: 200px;
-  font-size: $toc-indicator-size;
-  line-height: $toc-indicator-size;
-  backface-visibility: hidden;
+  top: 72px;
+  width: 100%;
+  max-width: 296px;
+  margin: 24px 0 0;
+  padding: 14px 0 10px;
+  color: var(--fgColor-default, #1f2328);
+  background: var(--bgColor-default, #ffffff);
+  border: 1px solid var(--borderColor-muted, #d8dee4);
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(31, 35, 40, 0.08);
+  overflow: hidden;
+  animation: tocEntrance 280ms $ease-out both;
+}
 
-  ul {
-    position: relative;
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
+.tocHeader {
+  display: flex;
+  min-height: 24px;
+  padding: 0 14px 12px;
+  align-items: center;
+  gap: 8px;
+  color: var(--fgColor-default, #1f2328);
+  border-bottom: 1px solid var(--borderColor-muted, #d8dee4);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
 
-    &:before {
-      content: "";
-      display: block;
-      position: absolute;
-      left: math.div($toc-indicator-size, 2);
-      background-color: rgba(0, 0, 0, 0.5);
-      width: 1px;
-      height: 100%;
-    }
+  svg {
+    color: var(--fgColor-accent, #0969da);
+  }
+}
+
+.tocCount {
+  min-width: 20px;
+  margin-left: auto;
+  padding: 1px 6px;
+  color: var(--fgColor-muted, #59636e);
+  background: var(--bgColor-muted, #f6f8fa);
+  border-radius: 999px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.tocList {
+  max-height: calc(100vh - 160px);
+  margin: 8px 0 0;
+  padding: 0 8px;
+  overflow: hidden auto;
+  scrollbar-gutter: stable;
+  list-style: none;
+
+  &::-webkit-scrollbar {
+    width: 8px;
   }
 
-  li {
-    &:not(:last-child) {
-      a {
-        margin-bottom: $toc-indicator-size;
-      }
-    }
+  &::-webkit-scrollbar-thumb {
+    background: var(--borderColor-default, #d0d7de);
+    background-clip: padding-box;
+    border: 2px solid transparent;
+    border-radius: 999px;
+  }
+}
 
-    a {
-      display: block;
-      position: relative;
-      left: ($toc-indicator-size * 2);
-      color: #57606a;
-      text-decoration: none;
-      transition: 0.2s ease-in-out;
+.tocItem {
+  margin: 1px 0;
+}
 
-      &:before {
-        content: "";
-        display: block;
-        position: absolute;
-        left: ($toc-indicator-size * -2);
-        height: $toc-indicator-size;
-        width: $toc-indicator-size;
-        background-color: white;
-        border-radius: 50%;
-        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.5);
-      }
+.tocLink {
+  --toc-indent: 0px;
 
-      &:hover {
-        color: rgba(0, 0, 0, 1);
+  position: relative;
+  display: block;
+  min-height: 32px;
+  padding: 7px 10px 7px calc(10px + var(--toc-indent));
+  color: var(--fgColor-muted, #59636e);
+  border-radius: 7px;
+  font-size: 12px;
+  line-height: 18px;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+  transition:
+    color 140ms ease,
+    background-color 140ms ease,
+    transform 180ms $ease-out;
 
-        &:before {
-          box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5);
-        }
-      }
-    }
-    &.selected {
-      a {
-        color: #24292f;
-        font-weight: bold;
-        &:before {
-          background-color: #24292f;
-        }
-      }
-    }
+  &::before {
+    position: absolute;
+    top: 7px;
+    bottom: 7px;
+    left: 0;
+    width: 2px;
+    background: var(--bgColor-accent-emphasis, #0969da);
+    border-radius: 999px;
+    content: "";
+    opacity: 0;
+    transform: scaleY(0.3);
+    transition:
+      opacity 140ms ease,
+      transform 180ms $ease-out;
   }
 
-  /* touch device overrides */
-  .touch & {
-    li {
-      a {
-        color: rgba(0, 0, 0, 0.5);
-      }
-    }
+  &:hover {
+    color: var(--fgColor-default, #1f2328);
+    background: var(--control-transparent-bgColor-hover, rgba(175, 184, 193, 0.16));
+    transform: translateX(2px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-outlineColor, #0969da);
+    outline-offset: -2px;
+  }
+}
+
+.selected .tocLink {
+  color: var(--fgColor-accent, #0969da);
+  background: var(--bgColor-accent-muted, rgba(84, 174, 255, 0.16));
+  font-weight: 600;
+
+  &::before {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes tocEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1011px) {
+  .toc {
+    display: none;
+  }
+
+  .backTopBtn {
+    right: 16px;
+    bottom: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backTopBtn,
+  .toc,
+  .tocLink,
+  .tocLink::before {
+    animation: none;
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
   }
 }

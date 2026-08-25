@@ -1,22 +1,29 @@
 const { resolve } = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const tsRule = {
-  test: /\.ts(x?)$/,
+  test: /\.ts$/,
   exclude: /node_modules/,
-  use: "ts-loader",
+  use: {
+    loader: "ts-loader",
+    options: {
+      onlyCompileBundledFiles: true,
+    },
+  },
 };
 
 const scssRule = {
   test: /\.s[ac]ss$/i,
   exclude: /node_modules/,
   use: [
-    "style-loader",
+    MiniCssExtractPlugin.loader,
     {
       loader: "css-loader",
       options: {
-        modules: true,
+        modules: {
+          namedExport: false,
+        },
       },
     },
     "sass-loader",
@@ -27,7 +34,7 @@ const plugins = [
   new CopyWebpackPlugin({
     patterns: [{ from: "public", to: "." }],
   }),
-  new CleanWebpackPlugin(),
+  new MiniCssExtractPlugin({ filename: "[name].css" }),
 ];
 
 module.exports = {
@@ -37,7 +44,9 @@ module.exports = {
   output: {
     filename: "[name].js",
     path: resolve(__dirname, "dist"),
+    clean: true,
   },
+  target: ["web", "es2022"],
   module: {
     rules: [tsRule, scssRule],
   },

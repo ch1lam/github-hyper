@@ -1,7 +1,7 @@
 {
   "name": "github hyper",
   "description": "Plugins to enhance the github user experience",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "manifest_version": 3,
   "author": "ch1lam",
   "icons": {
@@ -13,7 +13,9 @@
   "content_scripts": [
     {
       "matches": ["https://github.com/*"],
-      "js": ["contentScript.js"]
+      "css": ["contentScript.css"],
+      "js": ["contentScript.js"],
+      "run_at": "document_idle"
     }
   ]
 }
