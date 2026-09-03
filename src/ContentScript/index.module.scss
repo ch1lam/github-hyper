@@ -75,6 +75,12 @@ $ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   animation: tocEntrance 280ms $ease-out both;
 }
 
+.tocPinned {
+  position: fixed;
+  top: 72px;
+  margin: 0;
+}
+
 .tocHeader {
   display: flex;
   min-height: 24px;

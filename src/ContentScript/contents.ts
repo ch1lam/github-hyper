@@ -15,6 +15,8 @@ const README_SELECTOR = "article.markdown-body";
 const SIDEBAR_SELECTOR = '[data-component="SplitPageLayout.Pane"]';
 const RELEVANT_SELECTOR = `${README_SELECTOR},${SIDEBAR_SELECTOR}`;
 const TOC_ID = "github-hyper-table-of-contents";
+// Pinned below GitHub's sticky header once the TOC would scroll out of view.
+const PIN_TOP = 72;
 
 let mountedReadme: HTMLElement | null = null;
 let mountedSidebar: HTMLElement | null = null;
@@ -23,6 +25,10 @@ let mountedSignature = "";
 let mountedHeadings: HTMLElement[] = [];
 let activeItem: HTMLElement | null = null;
 let headingObserver: IntersectionObserver | null = null;
+let pinObserver: IntersectionObserver | null = null;
+let pinPlaceholder: HTMLElement | null = null;
+let isPinned = false;
+let pinOffsetX = 0;
 const visibleHeadings = new Set<HTMLElement>();
 
 const extractTitles = (readme: HTMLElement): TitleInfo[] => {
@@ -122,6 +128,77 @@ const render = (titles: TitleInfo[]) => {
   return { itemByHeading, nav };
 };
 
+const pinToc = () => {
+  const nav = mountedToc;
+  const sidebar = mountedSidebar;
+  const placeholder = pinPlaceholder;
+  if (!nav || !sidebar || !placeholder || isPinned) {
+    return;
+  }
+  const rect = nav.getBoundingClientRect();
+  if (rect.width === 0) {
+    return; // hidden by responsive CSS
+  }
+  pinOffsetX = rect.left - sidebar.getBoundingClientRect().left;
+  nav.classList.add(styles.tocPinned);
+  nav.style.left = `${rect.left}px`;
+  nav.style.width = `${rect.width}px`;
+  placeholder.style.height = `${rect.height}px`;
+  isPinned = true;
+};
+
+const unpinToc = () => {
+  if (!mountedToc || !isPinned) {
+    return;
+  }
+  isPinned = false;
+  mountedToc.classList.remove(styles.tocPinned);
+  mountedToc.style.left = "";
+  mountedToc.style.width = "";
+  if (pinPlaceholder) {
+    pinPlaceholder.style.height = "";
+  }
+};
+
+const observePin = (sidebar: HTMLElement, nav: HTMLElement) => {
+  const placeholder = document.createElement("div");
+  sidebar.insertBefore(placeholder, nav);
+  pinPlaceholder = placeholder;
+
+  pinObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.target !== pinPlaceholder || !mountedToc) {
+          continue;
+        }
+        if (entry.boundingClientRect.top < PIN_TOP) {
+          pinToc();
+        } else {
+          unpinToc();
+        }
+      }
+    },
+    { rootMargin: `-${PIN_TOP}px 0px 0px 0px` },
+  );
+  pinObserver.observe(placeholder);
+};
+
+// The sidebar never moves on vertical scroll, so the pinned offset only goes
+// stale on viewport/layout resize.
+window.addEventListener("resize", () => {
+  if (!mountedToc || !mountedSidebar) {
+    return;
+  }
+  if (getComputedStyle(mountedToc).display === "none") {
+    unpinToc();
+    return;
+  }
+  if (isPinned) {
+    const sidebarRect = mountedSidebar.getBoundingClientRect();
+    mountedToc.style.left = `${sidebarRect.left + pinOffsetX}px`;
+  }
+});
+
 const stopHeadingObserver = () => {
   headingObserver?.disconnect();
   headingObserver = null;
@@ -130,6 +207,12 @@ const stopHeadingObserver = () => {
 
 const removeContents = () => {
   stopHeadingObserver();
+  pinObserver?.disconnect();
+  pinObserver = null;
+  pinPlaceholder?.remove();
+  pinPlaceholder = null;
+  isPinned = false;
+  pinOffsetX = 0;
   mountedToc?.remove();
   mountedToc = null;
   mountedSignature = "";
@@ -224,6 +307,7 @@ export const syncContents = () => {
   mountedSignature = signature;
   mountedHeadings = headingElements;
   observeHeadings(titles, itemByHeading);
+  observePin(sidebar, nav);
 };
 
 const containsRelevantElement = (node: Node) =>
