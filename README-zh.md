@@ -69,4 +69,4 @@
 4. 点击 `打包扩展`
 5. 选择 `/github-hyper/dist`目录并点击`打包扩展`
 
-推送与扩展版本一致的标签（例如 `v0.6.4`）后，GitHub Actions 会自动构建 Chrome/Edge ZIP 并发布 GitHub Release。
+推送与扩展版本一致的标签（例如 `v0.6.5`）后，GitHub Actions 会自动构建 Chrome/Edge ZIP 并发布 GitHub Release。

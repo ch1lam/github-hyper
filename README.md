@@ -69,4 +69,4 @@ Anyone is welcome to provide contributions to this project by submitting a PR (P
 4. Click `Pack extension`
 5. Choose `/github-hyper/dist` and click `Pack extension`
 
-Pushing a tag that matches the extension version, such as `v0.6.4`, automatically builds both browser ZIP packages and publishes a GitHub Release.
+Pushing a tag that matches the extension version, such as `v0.6.5`, automatically builds both browser ZIP packages and publishes a GitHub Release.
