@@ -12,6 +12,8 @@ const README_SELECTORS = ["#readme-ov-file .markdown-body", ".markdown-body"];
 const SIDEBAR_SELECTORS = [
   '[data-component="SplitPageLayout.Sidebar"]',
   "div.Layout.Layout--flowRow-until-md.Layout--sidebarPosition-end.Layout--sidebarPosition-flowRow-end div.Layout-sidebar",
+  ".Layout-sidebar",
+  "aside",
 ];
 
 const RELEVANT_SELECTOR = [...README_SELECTORS, ...SIDEBAR_SELECTORS].join(",");
@@ -40,7 +42,7 @@ const extractTitles = (readme: HTMLElement): TitleInfo[] => {
   const result: TitleInfo[] = [];
 
   readme.querySelectorAll<HTMLElement>("h1, h2, h3, h4, h5, h6").forEach((heading) => {
-    const id = heading.id || heading.firstElementChild?.id;
+    const id = heading.id || heading.querySelector<HTMLElement>("[id]")?.id;
     const title = heading.textContent?.trim();
     if (!id || !title) {
       return;
@@ -240,6 +242,9 @@ const containsRelevantElement = (node: Node) =>
 
 /**
  * Ignore unrelated GitHub UI mutations once the README and sidebar are mounted.
+ * Fixed: previous version filtered too aggressively and missed the initial
+ * README population where headings are added without the markdown-body wrapper
+ * being in addedNodes. Now we check both containment and added/removed nodes.
  */
 export const shouldSyncContents = (mutations: MutationRecord[]) => {
   if (
@@ -250,15 +255,12 @@ export const shouldSyncContents = (mutations: MutationRecord[]) => {
     return true;
   }
 
-  if (mountedReadme && mountedSidebar) {
-    return mutations.some((mutation) => mountedReadme?.contains(mutation.target));
-  }
-
   return mutations.some((mutation) => {
-    if (mountedReadme?.contains(mutation.target)) {
+    if (mountedReadme?.contains(mutation.target) || mountedToc?.contains(mutation.target)) {
       return true;
     }
 
-    return [...mutation.addedNodes].some(containsRelevantElement);
+    const nodes = [...mutation.addedNodes, ...mutation.removedNodes];
+    return nodes.some(containsRelevantElement);
   });
 };
