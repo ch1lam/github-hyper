@@ -86,7 +86,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ## Gotchas
 
-- **Version must be kept in sync** between `package.json` and `public/manifest.json` (currently 0.6.1). Bump both. CI (`.github/workflows/release.yml`) fails if they differ, and requires release tags to be exactly `v<version>`.
+- **Version must be kept in sync** between `package.json` and `public/manifest.json` (currently 0.6.2). Bump both. CI (`.github/workflows/release.yml`) fails if they differ, and requires release tags to be exactly `v<version>`.
 - Release: pushing tag `v*` (e.g. `v0.6.1`) builds `dist/`, zips identical chrome/edge packages, and publishes/updates the GitHub Release.
 - The extension is tightly coupled to GitHub's DOM and is fragile by design:
   - GitHub renders repo pages as a Primer React app; the README is **not in the initial HTML** — it's rendered client-side, so TOC extraction only works after the README mounts.
