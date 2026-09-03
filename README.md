@@ -3,7 +3,7 @@
 ![Github Hyper Banner](https://user-images.githubusercontent.com/39334548/173551041-0aec28df-3b70-451d-becf-4b882129b799.png)
 
 <p align=center>
-Chrome plugin to enhance the github user experience.
+Chrome/Edge (MV3) extension to enhance the GitHub user experience.
 </p>
 
 <br>
@@ -18,7 +18,7 @@ Chrome plugin to enhance the github user experience.
 
 - ⚡ Lightweight script
 - 🔝 Back to top button
-- 📇 Table of contents
+- 📇 README table of contents (sticky while scrolling, with active-heading highlight)
 
 ## Installation Instructions
 
@@ -58,7 +58,7 @@ Anyone is welcome to provide contributions to this project by submitting a PR (P
 
 1. Clone the project
 2. Open in VS Code or your favourite editor
-3. Run `pnpm` to install dependencies
+3. Run `pnpm install` to install dependencies
 4. Run `pnpm dev` to build the development version
 
 ### Package .crx
@@ -69,4 +69,4 @@ Anyone is welcome to provide contributions to this project by submitting a PR (P
 4. Click `Pack extension`
 5. Choose `/github-hyper/dist` and click `Pack extension`
 
-Pushing a tag that matches the extension version, such as `v0.6.0`, automatically builds both browser ZIP packages and publishes a GitHub Release.
+Pushing a tag that matches the extension version, such as `v0.6.4`, automatically builds both browser ZIP packages and publishes a GitHub Release.

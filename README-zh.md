@@ -3,7 +3,7 @@
 ![Github Hyper Banner](https://user-images.githubusercontent.com/39334548/173551041-0aec28df-3b70-451d-becf-4b882129b799.png)
 
 <p align=center>
-一款提升github用户体验的插件。
+一款提升 GitHub 用户体验的 Chrome/Edge（MV3）插件。
 </p>
 
 <br>
@@ -18,7 +18,7 @@
 
 - ⚡ 轻量化脚本
 - 🔝 返回顶部按钮
-- 📇 Readme 目录
+- 📇 README 目录（滚动时钉住 + 当前标题高亮）
 
 ## 安装说明
 
@@ -58,7 +58,7 @@
 
 1. 克隆项目
 2. 在 vscode 中打开项目，或者其他你最喜爱的编辑器
-3. 在命令行中运行 `pnpm` 安装依赖
+3. 在命令行中运行 `pnpm install` 安装依赖
 4. 在命令行中运行 `pnpm dev` 去构建开发环境版本
 
 ### 打包.crx 文件
@@ -69,4 +69,4 @@
 4. 点击 `打包扩展`
 5. 选择 `/github-hyper/dist`目录并点击`打包扩展`
 
-推送与扩展版本一致的标签（例如 `v0.6.0`）后，GitHub Actions 会自动构建 Chrome/Edge ZIP 并发布 GitHub Release。
+推送与扩展版本一致的标签（例如 `v0.6.4`）后，GitHub Actions 会自动构建 Chrome/Edge ZIP 并发布 GitHub Release。
