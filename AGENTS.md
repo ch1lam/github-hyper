@@ -90,8 +90,8 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Release: pushing tag `v*` (e.g. `v0.6.1`) builds `dist/`, zips identical chrome/edge packages, and publishes/updates the GitHub Release.
 - The extension is tightly coupled to GitHub's DOM and is fragile by design:
   - GitHub renders repo pages as a Primer React app; the README is **not in the initial HTML** — it's rendered client-side, so TOC extraction only works after the README mounts.
-  - TOC extraction tries `README_SELECTORS` (`#readme-ov-file .markdown-body`, `article.markdown-body`, `.markdown-body`) and injects into the first match of `SIDEBAR_SELECTORS` (`SplitPageLayout.Sidebar/Pane`, `PageLayout.Pane`, `.prc-PageLayout-*`, legacy `.Layout-sidebar`, `aside`) in `src/ContentScript/contents.ts`.
-  - Heading `id` resolution handles GitHub's `.markdown-heading` wrapper (id on sibling `a[id]`) with next-sibling/parent fallbacks; headings without `id`+text are skipped.
+  - TOC extraction targets `article.markdown-body` and injects into `[data-component="SplitPageLayout.Pane"]` in `src/ContentScript/contents.ts`. No legacy selectors — new GitHub DOM only.
+  - Heading `id` resolution handles GitHub's `.markdown-heading` wrapper (id on sibling `a[id]`); headings without `id`+text are skipped.
   - `syncContents` is idempotent (skips when readme/sidebar/TOC nodes + title signature + heading identities are unchanged); active heading is highlighted via `IntersectionObserver`.
   - Re-crawls on DOM mutations via a `MutationObserver` (GitHub's SPA nav uses Turbo-frames, not pjax) in `src/ContentScript/index.ts`, filtered by `shouldSyncContents` to ignore unrelated UI mutations.
 - Changes to GitHub's markup silently break features (empty TOC, missing button). After DOM-related edits, test against a real GitHub repo README (with headings) and a non-README page.

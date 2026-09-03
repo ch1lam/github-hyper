@@ -7,16 +7,13 @@ interface TitleInfo {
   level: number;
 }
 
-const README_SELECTORS = ["#readme-ov-file .markdown-body", ".markdown-body"];
-
-const SIDEBAR_SELECTORS = [
-  '[data-component="SplitPageLayout.Sidebar"]',
-  "div.Layout.Layout--flowRow-until-md.Layout--sidebarPosition-end.Layout--sidebarPosition-flowRow-end div.Layout-sidebar",
-  ".Layout-sidebar",
-  "aside",
-];
-
-const RELEVANT_SELECTOR = [...README_SELECTORS, ...SIDEBAR_SELECTORS].join(",");
+// New GitHub repo page (Primer React, SplitPageLayout):
+// - README is client-rendered as <article class="markdown-body"> (shipped as
+//   escaped JSON in overviewFiles.richText, not in the initial HTML).
+// - Sidebar is <div data-component="SplitPageLayout.Pane">.
+const README_SELECTOR = "article.markdown-body";
+const SIDEBAR_SELECTOR = '[data-component="SplitPageLayout.Pane"]';
+const RELEVANT_SELECTOR = `${README_SELECTOR},${SIDEBAR_SELECTOR}`;
 const TOC_ID = "github-hyper-table-of-contents";
 
 let mountedReadme: HTMLElement | null = null;
@@ -28,21 +25,14 @@ let activeItem: HTMLElement | null = null;
 let headingObserver: IntersectionObserver | null = null;
 const visibleHeadings = new Set<HTMLElement>();
 
-const findElement = (selectors: string[]): HTMLElement | null => {
-  for (const selector of selectors) {
-    const element = document.querySelector<HTMLElement>(selector);
-    if (element) {
-      return element;
-    }
-  }
-  return null;
-};
-
 const extractTitles = (readme: HTMLElement): TitleInfo[] => {
   const result: TitleInfo[] = [];
 
   readme.querySelectorAll<HTMLElement>("h1, h2, h3, h4, h5, h6").forEach((heading) => {
-    const id = heading.id || heading.querySelector<HTMLElement>("[id]")?.id;
+    // New DOM: <div class="markdown-heading"><h2>title</h2><a id="user-content-xxx">
+    // where the id lives on the sibling anchor inside the wrapper.
+    const wrapper = heading.closest<HTMLElement>(".markdown-heading");
+    const id = heading.id || wrapper?.querySelector<HTMLElement>("a[id]")?.id || "";
     const title = heading.textContent?.trim();
     if (!id || !title) {
       return;
@@ -201,8 +191,8 @@ const getSignature = (titles: TitleInfo[]) =>
  * Synchronize the table of contents with GitHub's client-rendered README.
  */
 export const syncContents = () => {
-  const readme = findElement(README_SELECTORS);
-  const sidebar = findElement(SIDEBAR_SELECTORS);
+  const readme = document.querySelector<HTMLElement>(README_SELECTOR);
+  const sidebar = document.querySelector<HTMLElement>(SIDEBAR_SELECTOR);
   const titles = readme ? extractTitles(readme) : [];
   const signature = getSignature(titles);
   const headingElements = titles.map(({ element }) => element);
@@ -242,9 +232,6 @@ const containsRelevantElement = (node: Node) =>
 
 /**
  * Ignore unrelated GitHub UI mutations once the README and sidebar are mounted.
- * Fixed: previous version filtered too aggressively and missed the initial
- * README population where headings are added without the markdown-body wrapper
- * being in addedNodes. Now we check both containment and added/removed nodes.
  */
 export const shouldSyncContents = (mutations: MutationRecord[]) => {
   if (
