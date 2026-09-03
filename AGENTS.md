@@ -68,23 +68,30 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ## Build & test
 
-- Install: `pnpm`
-- Build (production, minified): `pnpm build` → outputs to `dist/`
-- Build (development, unminified + sourcemaps): `pnpm dev`
-- There is **no dev server, HMR, test suite, linter, or typecheck script**. `dev` is just a non-minified webpack build. To verify changes, run `pnpm build` (or `npx tsc --noEmit` for types).
+- Install: `pnpm install` (CI uses `pnpm install --frozen-lockfile`)
+- Build (production, minified): `pnpm build` (= `tsc --noEmit && webpack --config webpack.prod.js`) → outputs to `dist/`
+- Build (development, unminified + sourcemaps): `pnpm dev` (webpack.dev.js, `development` + `cheap-module-source-map`)
+- Typecheck: `pnpm typecheck` (= `tsc --noEmit`, strict, ES2022 target)
+- There is **no dev server, HMR, test suite, or linter**. `dev`/`build` are just webpack builds. To verify changes, run `pnpm build`.
 - To try changes: build, then load `dist/` via `chrome://extensions` (or `edge://extensions`) → "Load unpacked". Reload the extension after every rebuild; `dist` is gitignored.
 
 ## Architecture
 
-- Single webpack entry: `src/ContentScript/index.ts` → bundles to `dist/contentScript.js`. `public/manifest.json` and `public/icons/` are copied verbatim into `dist` (webpack.common.js).
-- The script is plain TS + DOM APIs; **React is a dependency but unused** — don't reach for JSX/React components.
-- Styles are SCSS modules (`src/ContentScript/index.module.scss`), compiled with CSS Modules (css-loader `modules: true`). Import as `import styles from "*.module.scss"` and reference classes via `styles.<name>`; the module declaration lives in `src/types/index.d.ts`.
+- Single webpack entry: `src/ContentScript/index.ts` → bundles to `dist/contentScript.js` (+ `contentScript.css`). `public/` (`manifest.json`, `icons/`) is copied verbatim into `dist` (webpack.common.js).
+- MV3 content script (`public/manifest.json`): matches `https://github.com/*`, `run_at: document_idle`.
+- Plain TS + DOM APIs, no framework — don't add JSX/React components.
+- Code split: `index.ts` owns back-to-top button + `MutationObserver` bootstrap; `contents.ts` owns TOC extraction/render/highlight (`syncContents` / `shouldSyncContents`).
+- Styles are SCSS modules (`src/ContentScript/index.module.scss`), compiled with CSS Modules (css-loader `modules: { namedExport: false }`). Import as `import styles from "*.module.scss"` and reference classes via `styles.<name>`; the module declaration lives in `src/types/index.d.ts`.
+- TS is strict ES2022 (`tsconfig.json`, `noUnusedLocals`/`noUnusedParameters` on).
 
 ## Gotchas
 
-- **Version must be kept in sync** between `package.json` and `public/manifest.json` (currently 0.4.1). Bump both.
+- **Version must be kept in sync** between `package.json` and `public/manifest.json` (currently 0.6.1). Bump both. CI (`.github/workflows/release.yml`) fails if they differ, and requires release tags to be exactly `v<version>`.
+- Release: pushing tag `v*` (e.g. `v0.6.1`) builds `dist/`, zips identical chrome/edge packages, and publishes/updates the GitHub Release.
 - The extension is tightly coupled to GitHub's DOM and is fragile by design:
   - GitHub renders repo pages as a Primer React app; the README is **not in the initial HTML** — it's rendered client-side, so TOC extraction only works after the README mounts.
-  - TOC extraction targets the client-rendered README (`.markdown-body`, `#readme-ov-file`) and injects into the `[data-component="SplitPageLayout.Sidebar"]` element (old `div.Layout--flowRow-until-md...` selector kept as fallback) in `src/ContentScript/contents.ts`.
-  - Re-crawls on DOM mutations via a `MutationObserver` (GitHub's SPA nav uses Turbo-frames, not pjax) in `src/ContentScript/index.ts`.
+  - TOC extraction tries `README_SELECTORS` (`#readme-ov-file .markdown-body`, `article.markdown-body`, `.markdown-body`) and injects into the first match of `SIDEBAR_SELECTORS` (`SplitPageLayout.Sidebar/Pane`, `PageLayout.Pane`, `.prc-PageLayout-*`, legacy `.Layout-sidebar`, `aside`) in `src/ContentScript/contents.ts`.
+  - Heading `id` resolution handles GitHub's `.markdown-heading` wrapper (id on sibling `a[id]`) with next-sibling/parent fallbacks; headings without `id`+text are skipped.
+  - `syncContents` is idempotent (skips when readme/sidebar/TOC nodes + title signature + heading identities are unchanged); active heading is highlighted via `IntersectionObserver`.
+  - Re-crawls on DOM mutations via a `MutationObserver` (GitHub's SPA nav uses Turbo-frames, not pjax) in `src/ContentScript/index.ts`, filtered by `shouldSyncContents` to ignore unrelated UI mutations.
 - Changes to GitHub's markup silently break features (empty TOC, missing button). After DOM-related edits, test against a real GitHub repo README (with headings) and a non-README page.
