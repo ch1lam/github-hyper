@@ -25,10 +25,10 @@ let mountedSignature = "";
 let mountedHeadings: HTMLElement[] = [];
 let activeItem: HTMLElement | null = null;
 let headingObserver: IntersectionObserver | null = null;
-let pinObserver: IntersectionObserver | null = null;
 let pinPlaceholder: HTMLElement | null = null;
 let isPinned = false;
 let pinOffsetX = 0;
+let pinRaf = 0;
 const visibleHeadings = new Set<HTMLElement>();
 
 const extractTitles = (readme: HTMLElement): TitleInfo[] => {
@@ -160,28 +160,39 @@ const unpinToc = () => {
   }
 };
 
-const observePin = (sidebar: HTMLElement, nav: HTMLElement) => {
+// IntersectionObserver only reports enter/exit transitions, so it can't track
+// the continuous "dock back below the sidebar" moment. A rAF-throttled scroll
+// check (same pattern as the back-to-top button) measures the placeholder's
+// flow position while scrolling instead.
+const updatePin = () => {
+  pinRaf = 0;
+  if (!mountedToc || !pinPlaceholder) {
+    return;
+  }
+  const flowTop = pinPlaceholder.getBoundingClientRect().top;
+  if (!isPinned && flowTop < PIN_TOP) {
+    pinToc();
+  } else if (isPinned && flowTop >= PIN_TOP) {
+    unpinToc();
+  }
+};
+
+const schedulePinUpdate = () => {
+  if (!pinRaf) {
+    pinRaf = window.requestAnimationFrame(updatePin);
+  }
+};
+
+const setupPin = (sidebar: HTMLElement, nav: HTMLElement) => {
+  // The placeholder holds the TOC's flow slot so pinning never shifts layout,
+  // and its position tells us when to dock back below the sidebar.
   const placeholder = document.createElement("div");
   sidebar.insertBefore(placeholder, nav);
   pinPlaceholder = placeholder;
-
-  pinObserver = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (entry.target !== pinPlaceholder || !mountedToc) {
-          continue;
-        }
-        if (entry.boundingClientRect.top < PIN_TOP) {
-          pinToc();
-        } else {
-          unpinToc();
-        }
-      }
-    },
-    { rootMargin: `-${PIN_TOP}px 0px 0px 0px` },
-  );
-  pinObserver.observe(placeholder);
+  updatePin();
 };
+
+window.addEventListener("scroll", schedulePinUpdate, { passive: true });
 
 // The sidebar never moves on vertical scroll, so the pinned offset only goes
 // stale on viewport/layout resize.
@@ -197,6 +208,7 @@ window.addEventListener("resize", () => {
     const sidebarRect = mountedSidebar.getBoundingClientRect();
     mountedToc.style.left = `${sidebarRect.left + pinOffsetX}px`;
   }
+  updatePin();
 });
 
 const stopHeadingObserver = () => {
@@ -207,8 +219,6 @@ const stopHeadingObserver = () => {
 
 const removeContents = () => {
   stopHeadingObserver();
-  pinObserver?.disconnect();
-  pinObserver = null;
   pinPlaceholder?.remove();
   pinPlaceholder = null;
   isPinned = false;
@@ -307,7 +317,7 @@ export const syncContents = () => {
   mountedSignature = signature;
   mountedHeadings = headingElements;
   observeHeadings(titles, itemByHeading);
-  observePin(sidebar, nav);
+  setupPin(sidebar, nav);
 };
 
 const containsRelevantElement = (node: Node) =>
